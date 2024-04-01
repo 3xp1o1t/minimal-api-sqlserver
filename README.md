@@ -16,5 +16,8 @@ dotnet new web -o MinimalAPICurso
 
 ## Conceptos fundamentales de Net
 
-1-. _Solucion_ es un conjunto de proyectos
-2-. _csproj_ es un archivo similar a package.json
+1. **Solucion** es un conjunto de proyectos
+2. **csproj** es un archivo similar a package.json
+3. **launchSettings.json** es un archivo que solo es util en modo dev
+4. **appsettings.json** este en conjunto con **development** son archivos donde se almacena configuracion la cual puede ser accedida desde nuestro proyecto, todo depende del entorno de trabajo (desa/prod)
+5.
