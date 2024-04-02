@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.OutputCaching;
 using MinimalAPICurso.Entidades;
+using MinimalAPICurso.Repositorios;
 
 var builder = WebApplication.CreateBuilder(args);
 // Obtener un elemento de la configuracion
@@ -31,6 +33,9 @@ builder.Services.AddOutputCache();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Inyectar dependencias
+builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
+
 // Termina area de Servicios
 
 var app = builder.Build();
@@ -55,18 +60,29 @@ app.UseOutputCache();
 app.MapGet("/", [EnableCors(policyName: "any")] () => "Ambiente actual: " + ambiente);
 
 // Generos con cache habilitado
-app.MapGet("/generos", () =>
+app.MapGet("/generos", async (IRepositorioGeneros repositorioGeneros) =>
 {
+  return await repositorioGeneros.ObtenerGeneros();
+}).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("generos-get"));
 
-  var generos = new List<Genero>
+app.MapGet("/generos/{id}", async (int id, IRepositorioGeneros repositorioGeneros) =>
+{
+  var genero = await repositorioGeneros.ObtenerGeneroPorId(id);
+
+  if (genero is null)
   {
-    new Genero { Id = 1, Nombre = "Accion" },
-    new Genero { Id = 2, Nombre = "Comedia"},
-    new Genero { Id = 3, Nombre = "Fantasia"}
-  };
+    return Results.NotFound();
+  }
 
-  return generos;
-}).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)));
+  return Results.Ok(genero);
+});
+
+app.MapPost("/generos", async (Genero genero, IRepositorioGeneros repositorioGeneros, IOutputCacheStore outputCacheStore) =>
+{
+  var id = await repositorioGeneros.CrearGenero(genero);
+  await outputCacheStore.EvictByTagAsync("generos-get", default);
+  return TypedResults.Created($"/generos/{id}", genero);
+});
 
 // Termina area de Middlewares
 

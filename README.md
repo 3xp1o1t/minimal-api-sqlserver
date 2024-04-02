@@ -45,3 +45,6 @@ dotnet new web -o MinimalAPICurso
 11. **Cache** Configurar el servicio de cache ayuda a mejorar el rendimiento de la aplicacion.
 
 12. **MIDDLEWARE ORDEN** el orden de los middleware es importante, pues determina como seran ejecutados
+
+13. **SCOPE_IDENTITY** obtener el ultimo ID generado/insertado.
+14. **Nuget Packages** se requiere de Microsoft data SqlClient y Dapper.
