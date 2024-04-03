@@ -36,7 +36,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var generos = await conexion.QueryAsync<Genero>(@"SELECT * FROM Generos");
+                var generos = await conexion.QueryAsync<Genero>(@"SELECT * FROM Generos ORDER BY Nombre");
 
                 return generos.ToList();
             }
@@ -49,6 +49,37 @@ namespace MinimalAPICurso.Repositorios
                 var genero = await conexion.QueryFirstOrDefaultAsync<Genero>(@"SELECT * FROM Generos WHERE Id = @Id", new { id });
 
                 return genero;
+            }
+        }
+
+        public async Task<bool> ExisteGenero(int id)
+        {
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                var existe = await conexion.QuerySingleAsync<bool>(@"
+                IF EXISTS (SELECT 1 FROM Generos WHERE Id = @Id)
+                    SELECT 1
+                ELSE
+                    SELECT 0", new { id });
+
+                return existe;
+            }
+        }
+
+        public async Task ActualizarGenero(Genero genero)
+        {
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                await conexion.ExecuteAsync(@"UPDATE Generos
+                SET Nombre = @Nombre WHERE Id = @Id", genero);
+            }
+        }
+
+        public async Task BorrarGenero(int id)
+        {
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                await conexion.ExecuteAsync(@"DELETE FROM Generos WHERE Id = @Id", new { id });
             }
         }
     }
