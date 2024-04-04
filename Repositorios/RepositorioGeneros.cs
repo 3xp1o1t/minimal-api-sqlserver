@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -21,9 +22,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var id = await conexion.QuerySingleAsync<int>(@"
-                INSERT INTO Generos (Nombre) VALUES (@Nombre);
-                SELECT SCOPE_IDENTITY();", genero);
+                var id = await conexion.QuerySingleAsync<int>(@"SP_CrearGenero", new { genero.Nombre }, commandType: CommandType.StoredProcedure);
 
                 genero.Id = id;
 
@@ -36,7 +35,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var generos = await conexion.QueryAsync<Genero>(@"SELECT * FROM Generos ORDER BY Nombre");
+                var generos = await conexion.QueryAsync<Genero>(@"SP_ObtenerGeneros", commandType: CommandType.StoredProcedure);
 
                 return generos.ToList();
             }
@@ -46,7 +45,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var genero = await conexion.QueryFirstOrDefaultAsync<Genero>(@"SELECT * FROM Generos WHERE Id = @Id", new { id });
+                var genero = await conexion.QueryFirstOrDefaultAsync<Genero>(@"SP_ObtenerGeneroPorId", new { id }, commandType: CommandType.StoredProcedure);
 
                 return genero;
             }
@@ -56,11 +55,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var existe = await conexion.QuerySingleAsync<bool>(@"
-                IF EXISTS (SELECT 1 FROM Generos WHERE Id = @Id)
-                    SELECT 1
-                ELSE
-                    SELECT 0", new { id });
+                var existe = await conexion.QuerySingleAsync<bool>(@"SP_ExisteGeneroPorId", new { id }, commandType: CommandType.StoredProcedure);
 
                 return existe;
             }
@@ -70,8 +65,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                await conexion.ExecuteAsync(@"UPDATE Generos
-                SET Nombre = @Nombre WHERE Id = @Id", genero);
+                await conexion.ExecuteAsync(@"SP_ActualizarGenero", genero, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -79,7 +73,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                await conexion.ExecuteAsync(@"DELETE FROM Generos WHERE Id = @Id", new { id });
+                await conexion.ExecuteAsync(@"SP_BorrarGenero", new { id }, commandType: CommandType.StoredProcedure);
             }
         }
     }

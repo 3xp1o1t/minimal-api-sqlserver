@@ -52,3 +52,4 @@ dotnet new web -o MinimalAPICurso
 16. **Inyeccion Dependencias** Esto permite que tu código dependa de abstracciones en lugar de implementaciones concretas
 17. **AutoMapper** Auto mapper automatiza el proceso de los DTO's
 18. **Instalar un paquede desde el CLI** dotnet add d:/DotNet-Apps/MinimalAPICurso/MinimalAPICurso.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection -v 12.0.1 -s https://api.nuget.org/v3/index.json
+19. **@ antes de las cadenas** Basicamente ayudan al compilador a interpretar las cadenas como literales, es decir que se leen tal cual incluyendo caracteres especiales, ayuda a escaparlos.
