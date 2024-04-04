@@ -49,3 +49,4 @@ dotnet new web -o MinimalAPICurso
 13. **SCOPE_IDENTITY** obtener el ultimo ID generado/insertado.
 14. **Nuget Packages** se requiere de Microsoft data SqlClient y Dapper.
 15. **Endpoints** Los endpoints se pueden organizar en clases para tener un mejor control de los mismos.
+16. **Inyeccion Dependencias** Esto permite que tu código dependa de abstracciones en lugar de implementaciones concretas
