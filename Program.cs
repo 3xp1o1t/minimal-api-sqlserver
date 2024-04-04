@@ -38,6 +38,9 @@ builder.Services.AddSwaggerGen();
 // Inyectar dependencias
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 
+// AutoMapper - typeof permite buscar recursos desde la raiz.
+builder.Services.AddAutoMapper(typeof(Program));
+
 // Termina area de Servicios
 
 var app = builder.Build();

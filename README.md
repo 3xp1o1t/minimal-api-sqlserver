@@ -50,3 +50,5 @@ dotnet new web -o MinimalAPICurso
 14. **Nuget Packages** se requiere de Microsoft data SqlClient y Dapper.
 15. **Endpoints** Los endpoints se pueden organizar en clases para tener un mejor control de los mismos.
 16. **Inyeccion Dependencias** Esto permite que tu código dependa de abstracciones en lugar de implementaciones concretas
+17. **AutoMapper** Auto mapper automatiza el proceso de los DTO's
+18. **Instalar un paquede desde el CLI** dotnet add d:/DotNet-Apps/MinimalAPICurso/MinimalAPICurso.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection -v 12.0.1 -s https://api.nuget.org/v3/index.json
