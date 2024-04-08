@@ -36,7 +36,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var id = await conexion.QuerySingleAsync<int>("@SP_CrearActor", new { actor.Nombre, actor.FechaNacimiento, actor.Foto }, commandType: CommandType.StoredProcedure);
+                var id = await conexion.QuerySingleAsync<int>(@"SP_CrearActor", new { actor.Nombre, actor.FechaNacimiento, actor.Foto }, commandType: CommandType.StoredProcedure);
                 actor.Id = id;
                 return id;
             }

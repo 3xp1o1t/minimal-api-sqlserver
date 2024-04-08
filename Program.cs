@@ -67,6 +67,7 @@ app.MapGet("/", [EnableCors(policyName: "any")] () => "Ambiente actual: " + ambi
 
 // Map Group para agrupar los Endpoints
 app.MapGroup("/generos").MapGeneros();
+app.MapGroup("/actores").MapActores();
 
 // Termina area de Middlewares
 

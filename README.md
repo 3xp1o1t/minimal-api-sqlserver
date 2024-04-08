@@ -14,6 +14,19 @@ Para crear el proyecto con el CLI
 dotnet new web -o MinimalAPICurso
 ```
 
+## Flujo del Proyecto
+
+1. Se configura el proyecto desde el inicio con las librerias requeridas.
+2. Se crea el Modelo
+3. Se crea la tabla en SQLServer
+4. Se crea el comportamiento IModelo (Interfaz)
+5. Se crea el repositorio (Servicio que implementa el comportamiento)
+6. Se crean los Store Procedures
+7. Se crea el DTO
+8. Se mapea en (AutoMapperProfile)
+9. Se crean los endpoints
+10. Se mapea el grupo nuevo en Program.cs
+
 ## Conceptos fundamentales de Net
 
 1. **Solucion** e ws un conjunto de proyectos
@@ -53,3 +66,6 @@ dotnet new web -o MinimalAPICurso
 17. **AutoMapper** Auto mapper automatiza el proceso de los DTO's
 18. **Instalar un paquede desde el CLI** dotnet add d:/DotNet-Apps/MinimalAPICurso/MinimalAPICurso.csproj package AutoMapper.Extensions.Microsoft.DependencyInjection -v 12.0.1 -s https://api.nuget.org/v3/index.json
 19. **@ antes de las cadenas** Basicamente ayudan al compilador a interpretar las cadenas como literales, es decir que se leen tal cual incluyendo caracteres especiales, ayuda a escaparlos.
+20. **IFormFile** Representa cualquier tipo de archivo (PDF, Imagen, etc) normalmente enviado desde el cliente.
+21. **Ignore** Se puede ignorar el mapeo de elementos entre DTO's y Modelos cuando se usan por ejemplo IFormFile para crear un modelo y string? para recibir una url del archivo creado.
+22. **Anti-Forgery** se puede deshabilitar el chequeo de seguridad para la subida de archivos directamente en el endpoint con la opcion DisableAntiforgery().
