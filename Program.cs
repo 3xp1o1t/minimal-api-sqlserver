@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using MinimalAPICurso.Endpoints;
 using MinimalAPICurso.Entidades;
 using MinimalAPICurso.Repositorios;
+using MinimalAPICurso.Servicios;
 
 var builder = WebApplication.CreateBuilder(args);
 // Obtener un elemento de la configuracion
@@ -38,6 +39,9 @@ builder.Services.AddSwaggerGen();
 // Inyectar dependencias
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
+
+// Servicio de subida de archivos
+builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
 
 // AutoMapper - typeof permite buscar recursos desde la raiz.
 builder.Services.AddAutoMapper(typeof(Program));

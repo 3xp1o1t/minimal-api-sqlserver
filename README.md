@@ -69,3 +69,5 @@ dotnet new web -o MinimalAPICurso
 20. **IFormFile** Representa cualquier tipo de archivo (PDF, Imagen, etc) normalmente enviado desde el cliente.
 21. **Ignore** Se puede ignorar el mapeo de elementos entre DTO's y Modelos cuando se usan por ejemplo IFormFile para crear un modelo y string? para recibir una url del archivo creado.
 22. **Anti-Forgery** se puede deshabilitar el chequeo de seguridad para la subida de archivos directamente en el endpoint con la opcion DisableAntiforgery().
+23. **Comportamiento por default** En las nuevas versiones de .NET y c# se puede definir un comportamiento por defecto dentro de la misma interfaz como se hizo en IAlmacenarArchivos metodo Editar.
+24. **Azure storage** portal.azure.com es un SaaS en linea para bases de datos, archivos, etc. (Requiere Azure.Storage.Blobs nuget)
