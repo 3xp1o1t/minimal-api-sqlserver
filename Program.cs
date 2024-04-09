@@ -40,8 +40,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
 
-// Servicio de subida de archivos
-builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+// Servicio de subida de archivos Azure
+//builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
+
+// Servicio de subida de archivo en Local, requiere el servicio de HttpContextAccessor
+builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
+builder.Services.AddHttpContextAccessor();
+
+
 
 // AutoMapper - typeof permite buscar recursos desde la raiz.
 builder.Services.AddAutoMapper(typeof(Program));
@@ -59,6 +65,9 @@ if (builder.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+// Requerio para la carga de archivos estaticos
+app.UseStaticFiles();
 
 // Habilitar el middleware de CORS
 app.UseCors();

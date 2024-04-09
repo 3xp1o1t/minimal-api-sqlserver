@@ -71,3 +71,4 @@ dotnet new web -o MinimalAPICurso
 22. **Anti-Forgery** se puede deshabilitar el chequeo de seguridad para la subida de archivos directamente en el endpoint con la opcion DisableAntiforgery().
 23. **Comportamiento por default** En las nuevas versiones de .NET y c# se puede definir un comportamiento por defecto dentro de la misma interfaz como se hizo en IAlmacenarArchivos metodo Editar.
 24. **Azure storage** portal.azure.com es un SaaS en linea para bases de datos, archivos, etc. (Requiere Azure.Storage.Blobs nuget)
+25. **UseStaticFiles** middleware para permitirnos almacenar archivos localmente
