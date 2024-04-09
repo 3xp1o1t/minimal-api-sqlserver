@@ -10,5 +10,6 @@ namespace MinimalAPICurso.Repositorios
         Task<bool> ExisteActor(int id);
         Task<Actor?> ObtenerActorPorId(int id);
         Task<List<Actor>> ObtenerActores();
+        Task<List<Actor>> ObtenerActorPorNombre(string nombre);
     }
 }

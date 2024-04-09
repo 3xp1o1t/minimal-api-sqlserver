@@ -32,6 +32,15 @@ namespace MinimalAPICurso.Repositorios
             }
         }
 
+        public async Task<List<Actor>> ObtenerActorPorNombre(string nombre)
+        {
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                var actores = await conexion.QueryAsync<Actor>(@"SP_ObtenerActorPorNombre", new { nombre }, commandType: CommandType.StoredProcedure);
+                return actores.ToList();
+            }
+        }
+
         public async Task<int> CrearActor(Actor actor)
         {
             using (var conexion = new SqlConnection(connectionString))
