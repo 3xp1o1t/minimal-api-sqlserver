@@ -26,6 +26,7 @@ namespace MinimalAPICurso.Endpoints
             group.MapGet("obtenerPorNombre/{nombre}", ObtenerActorPorNombre);
             group.MapPost("/", CrearActor).DisableAntiforgery();
             group.MapPut("/{id:int}", ActualizarActor).DisableAntiforgery();
+            group.MapDelete("/{id:int}", BorrarActor);
             return group;
         }
 
@@ -92,6 +93,20 @@ namespace MinimalAPICurso.Endpoints
             }
 
             await repositorioActores.ActualizarActor(actorParaActualizar);
+            await outputCacheStore.EvictByTagAsync("actores-get", default);
+            return TypedResults.NoContent();
+        }
+
+        static async Task<Results<NoContent, NotFound>> BorrarActor(int id, IRepositorioActores repositorioActores, IOutputCacheStore outputCacheStore, IAlmacenadorArchivos almacenadorArchivos)
+        {
+            var actorEnDB = await repositorioActores.ObtenerActorPorId(id);
+            if (actorEnDB is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            await repositorioActores.BorrarActor(id);
+            await almacenadorArchivos.BorrarArchivo(actorEnDB.Foto, contenedor);
             await outputCacheStore.EvictByTagAsync("actores-get", default);
             return TypedResults.NoContent();
         }
