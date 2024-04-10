@@ -25,6 +25,7 @@ namespace MinimalAPICurso.Endpoints
             group.MapGet("/{id:int}", ObtenerActorPorId);
             group.MapGet("obtenerPorNombre/{nombre}", ObtenerActorPorNombre);
             group.MapPost("/", CrearActor).DisableAntiforgery();
+            group.MapPut("/{id:int}", ActualizarActor).DisableAntiforgery();
             return group;
         }
 
@@ -70,6 +71,29 @@ namespace MinimalAPICurso.Endpoints
             await outputCacheStore.EvictByTagAsync("actores-get", default);
             var actorDTO = mapper.Map<ActorDTO>(actor);
             return TypedResults.Created($"/actores/{id}", actorDTO);
+        }
+
+        static async Task<Results<NoContent, NotFound>> ActualizarActor(int id, [FromForm] CrearActorDTO crearActorDTO, IRepositorioActores repositorioActores, IAlmacenadorArchivos almacenadorArchivos, IOutputCacheStore outputCacheStore, IMapper mapper)
+        {
+            var actorEnDB = await repositorioActores.ObtenerActorPorId(id);
+            if (actorEnDB is null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            var actorParaActualizar = mapper.Map<Actor>(crearActorDTO);
+            actorParaActualizar.Id = id;
+            actorParaActualizar.Foto = actorEnDB.Foto;
+
+            if (crearActorDTO.Foto is not null)
+            {
+                var url = await almacenadorArchivos.EditarArchivo(actorParaActualizar.Foto, contenedor, crearActorDTO.Foto);
+                actorParaActualizar.Foto = url;
+            }
+
+            await repositorioActores.ActualizarActor(actorParaActualizar);
+            await outputCacheStore.EvictByTagAsync("actores-get", default);
+            return TypedResults.NoContent();
         }
     }
 }

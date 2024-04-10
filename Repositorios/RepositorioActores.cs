@@ -63,7 +63,7 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                await conexion.ExecuteAsync("@SP_ActualizarActor", actor, commandType: CommandType.StoredProcedure);
+                await conexion.ExecuteAsync(@"SP_ActualizarActor", actor, commandType: CommandType.StoredProcedure);
             }
         }
 
