@@ -28,9 +28,10 @@ namespace MinimalAPICurso.Endpoints
             return group;
         }
 
-        static async Task<Ok<List<ActorDTO>>> ObtenerActores(IRepositorioActores repositorioActores, IMapper mapper)
+        static async Task<Ok<List<ActorDTO>>> ObtenerActores(IRepositorioActores repositorioActores, IMapper mapper, int pagina = 1, int registrosPorPagina = 10)
         {
-            var actores = await repositorioActores.ObtenerActores();
+            var paginacion = new PaginacionDTO { Pagina = pagina, RegistrosPorPagina = registrosPorPagina };
+            var actores = await repositorioActores.ObtenerActores(paginacion);
             var actoresDTO = mapper.Map<List<ActorDTO>>(actores);
             return TypedResults.Ok(actoresDTO);
         }

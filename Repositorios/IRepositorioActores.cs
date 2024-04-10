@@ -1,3 +1,4 @@
+using MinimalAPICurso.DTOs;
 using MinimalAPICurso.Entidades;
 
 namespace MinimalAPICurso.Repositorios
@@ -9,7 +10,7 @@ namespace MinimalAPICurso.Repositorios
         Task<int> CrearActor(Actor actor);
         Task<bool> ExisteActor(int id);
         Task<Actor?> ObtenerActorPorId(int id);
-        Task<List<Actor>> ObtenerActores();
+        Task<List<Actor>> ObtenerActores(PaginacionDTO paginacionDTO);
         Task<List<Actor>> ObtenerActorPorNombre(string nombre);
     }
 }

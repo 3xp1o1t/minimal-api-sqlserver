@@ -1,6 +1,7 @@
 using System.Data;
 using Dapper;
 using Microsoft.Data.SqlClient;
+using MinimalAPICurso.DTOs;
 using MinimalAPICurso.Entidades;
 
 namespace MinimalAPICurso.Repositorios
@@ -8,17 +9,24 @@ namespace MinimalAPICurso.Repositorios
     public class RepositorioActores : IRepositorioActores
     {
         private readonly string connectionString;
+        private readonly HttpContext httpContext;
 
-        public RepositorioActores(IConfiguration configuration)
+        public RepositorioActores(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             connectionString = configuration.GetConnectionString("DefaultConnection")!;
+            httpContext = httpContextAccessor.HttpContext!;
         }
 
-        public async Task<List<Actor>> ObtenerActores()
+        public async Task<List<Actor>> ObtenerActores(PaginacionDTO paginacionDTO)
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var actores = await conexion.QueryAsync<Actor>(@"SP_ObtenerActores", commandType: CommandType.StoredProcedure);
+                var actores = await conexion.QueryAsync<Actor>(@"SP_ObtenerActores",
+                new { paginacionDTO.Pagina, paginacionDTO.RegistrosPorPagina }, commandType: CommandType.StoredProcedure);
+
+                var cantidadActores = await conexion.QuerySingleAsync<int>(@"SP_CantidadActores", commandType: CommandType.StoredProcedure);
+
+                httpContext.Response.Headers.Append("cantidadTotalRegistros", cantidadActores.ToString());
                 return actores.ToList();
             }
         }
