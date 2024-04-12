@@ -39,6 +39,7 @@ builder.Services.AddSwaggerGen();
 // Inyectar dependencias
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
+builder.Services.AddScoped<IRepositorioPeliculas, RepositorioPeliculas>();
 
 // Servicio de subida de archivos Azure
 //builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
@@ -81,6 +82,7 @@ app.MapGet("/", [EnableCors(policyName: "any")] () => "Ambiente actual: " + ambi
 // Map Group para agrupar los Endpoints
 app.MapGroup("/generos").MapGeneros();
 app.MapGroup("/actores").MapActores();
+app.MapGroup("/peliculas").MapPeliculas();
 
 // Termina area de Middlewares
 

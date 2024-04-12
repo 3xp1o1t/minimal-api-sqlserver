@@ -17,15 +17,16 @@ dotnet new web -o MinimalAPICurso
 ## Flujo del Proyecto
 
 1. Se configura el proyecto desde el inicio con las librerias requeridas.
-2. Se crea el Modelo
+2. Se crea el Modelo (Entidad)
 3. Se crea la tabla en SQLServer
 4. Se crea el comportamiento IModelo (Interfaz)
 5. Se crea el repositorio (Servicio que implementa el comportamiento)
 6. Se crean los Store Procedures
-7. Se crea el DTO
-8. Se mapea en (AutoMapperProfile)
-9. Se crean los endpoints
-10. Se mapea el grupo nuevo en Program.cs
+7. Se agrega el servicio del IRepositorio, Repositorio en Program.cs
+8. Se crea el DTO
+9. Se mapea en (AutoMapperProfile)
+10. Se crean los endpoints
+11. Se mapea el grupo de endpoints nuevo en Program.cs middleware.
 
 ## Conceptos fundamentales de Net
 
