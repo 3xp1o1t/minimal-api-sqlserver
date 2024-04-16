@@ -19,11 +19,11 @@ namespace MinimalAPICurso.Repositorios
             connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
-        public async Task<List<Comentario>> ObtenerComentarios()
+        public async Task<List<Comentario>> ObtenerComentarios(int peliculaId)
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var comentarios = await conexion.QueryAsync<Comentario>(@"SP_ObtenerComentarios", commandType: CommandType.StoredProcedure);
+                var comentarios = await conexion.QueryAsync<Comentario>(@"SP_ObtenerComentarios", new { peliculaId }, commandType: CommandType.StoredProcedure);
                 return comentarios.ToList();
             }
         }

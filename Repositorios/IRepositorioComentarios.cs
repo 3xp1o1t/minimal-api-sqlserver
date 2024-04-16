@@ -9,6 +9,6 @@ namespace MinimalAPICurso.Repositorios
         Task<int> CrearComentario(Comentario comentario);
         Task<bool> ExisteComentario(int id);
         Task<Comentario?> ObtenerComentarioPorId(int id);
-        Task<List<Comentario>> ObtenerComentarios();
+        Task<List<Comentario>> ObtenerComentarios(int peliculaId);
     }
 }
