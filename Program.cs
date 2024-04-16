@@ -40,6 +40,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
 builder.Services.AddScoped<IRepositorioPeliculas, RepositorioPeliculas>();
+builder.Services.AddScoped<IRepositorioComentarios, RepositorioComentarios>();
+
 
 // Servicio de subida de archivos Azure
 //builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosAzure>();
