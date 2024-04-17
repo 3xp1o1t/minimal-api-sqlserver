@@ -85,6 +85,7 @@ app.MapGet("/", [EnableCors(policyName: "any")] () => "Ambiente actual: " + ambi
 app.MapGroup("/generos").MapGeneros();
 app.MapGroup("/actores").MapActores();
 app.MapGroup("/peliculas").MapPeliculas();
+app.MapGroup("/pelicula/{peliculaId:int}/comentarios").MapComentarios();
 
 // Termina area de Middlewares
 
