@@ -18,6 +18,8 @@ namespace MinimalAPICurso.Endpoints
             group.MapGet("/", ObtenerComentarios).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("comentarios-get").SetVaryByRouteValue(new string[] { "peliculaId" }));
             group.MapGet("/{id:int}", ObtenerComentarioPorId);
             group.MapPost("/", CrearComentario);
+            group.MapPut("/{id:int}", ActualizarComentario);
+            group.MapDelete("/{id:int}", BorrarComentario);
             return group;
         }
 
@@ -59,6 +61,41 @@ namespace MinimalAPICurso.Endpoints
             await outputCacheStore.EvictByTagAsync("comentarios-get", default);
             var comentarioDTO = mapper.Map<ComentarioDTO>(comentario);
             return TypedResults.Created($"/comentario/{id}", comentarioDTO);
+        }
+
+        static async Task<Results<NoContent, NotFound>> ActualizarComentario(int peliculaId, int id, CrearComentarioDTO crearComentarioDTO, IOutputCacheStore outputCacheStore, IRepositorioPeliculas repositorioPeliculas, IRepositorioComentarios repositorioComentarios, IMapper mapper)
+        {
+            if (!await repositorioPeliculas.ExistePelicula(peliculaId))
+            {
+                return TypedResults.NotFound();
+            }
+
+            if (!await repositorioComentarios.ExisteComentario(id))
+            {
+                return TypedResults.NotFound();
+            }
+
+            var comentario = mapper.Map<Comentario>(crearComentarioDTO);
+            comentario.Id = id;
+            comentario.PeliculaId = peliculaId;
+
+            await repositorioComentarios.ActualizarComentario(comentario);
+            await outputCacheStore.EvictByTagAsync("comentarios-get", default);
+
+            return TypedResults.NoContent();
+        }
+
+        static async Task<Results<NoContent, NotFound>> BorrarComentario(int peliculaId, int id, IRepositorioComentarios repositorioComentarios, IOutputCacheStore outputCacheStore)
+        {
+            if (!await repositorioComentarios.ExisteComentario(id))
+            {
+                return TypedResults.NotFound();
+            }
+
+            await repositorioComentarios.BorrarComentario(id);
+            await outputCacheStore.EvictByTagAsync("comentarios-get", default);
+            return TypedResults.NoContent();
+
         }
     }
 }
