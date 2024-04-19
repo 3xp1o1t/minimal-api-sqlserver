@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Data.SqlClient;
 using MinimalAPICurso.DTOs;
+using MinimalAPICurso.Endpoints;
 using MinimalAPICurso.Entidades;
 
 namespace MinimalAPICurso.Repositorios
@@ -39,9 +40,15 @@ namespace MinimalAPICurso.Repositorios
         {
             using (var conexion = new SqlConnection(connectionString))
             {
-                var pelicula = await conexion.QuerySingleOrDefaultAsync<Pelicula>(@"SP_ObtenerPeliculaPorId", new { id }, commandType: CommandType.StoredProcedure);
+                using (var multi = await conexion.QueryMultipleAsync(@"SP_ObtenerPeliculaPorId", new { id }, commandType: CommandType.StoredProcedure))
+                {
+                    var pelicula = await multi.ReadFirstAsync<Pelicula>();
+                    var comentarios = await multi.ReadAsync<Comentario>();
 
-                return pelicula;
+                    pelicula.Comentarios = comentarios.ToList();
+                    return pelicula;
+                }
+
             }
         }
 
