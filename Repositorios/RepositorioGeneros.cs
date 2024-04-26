@@ -76,6 +76,24 @@ namespace MinimalAPICurso.Repositorios
                 await conexion.ExecuteAsync(@"SP_BorrarGenero", new { id }, commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task<List<int>> ExistenGeneros(List<int> ids)
+        {
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+
+            foreach (var id in ids)
+            {
+                dt.Rows.Add(id);
+            }
+
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                var idsGenerosExistentes = await conexion.QueryAsync<int>(@"SP_ObtenerVariosGenerosPorId", new { generosIds = dt }, commandType: CommandType.StoredProcedure);
+
+                return idsGenerosExistentes.ToList();
+            }
+        }
     }
 
 

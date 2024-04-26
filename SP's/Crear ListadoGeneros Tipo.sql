@@ -1,0 +1,1 @@
+CREATE TYPE ListadoEnteros AS TABLE (Id int);

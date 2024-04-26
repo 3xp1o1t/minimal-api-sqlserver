@@ -89,5 +89,21 @@ namespace MinimalAPICurso.Repositorios
                 await conexion.ExecuteAsync(@"SP_BorrarPelicula", new { id });
             }
         }
+
+        public async Task AsignarGeneros(int id, List<int> generosIds)
+        {
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+
+            foreach (var generoId in generosIds)
+            {
+                dt.Rows.Add(generoId);
+            }
+
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                await conexion.ExecuteAsync(@"SP_Peliculas_AsignarGeneros", new { peliculaId = id, generosIds = dt }, commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }

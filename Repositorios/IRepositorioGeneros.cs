@@ -10,5 +10,6 @@ namespace MinimalAPICurso.Repositorios
     Task<bool> ExisteGenero(int id);
     Task ActualizarGenero(Genero genero);
     Task BorrarGenero(int id);
+    Task<List<int>> ExistenGeneros(List<int> ids);
   }
 }
