@@ -77,6 +77,24 @@ namespace MinimalAPICurso.Repositorios
             }
         }
 
+        public async Task<List<int>> ExistenActores(List<int> ids)
+        {
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+
+            foreach (var id in ids)
+            {
+                dt.Rows.Add(id);
+            }
+
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                var idsActoresExistentes = await conexion.QueryAsync<int>(@"SP_ObtenerVariosActoresPorId", new { actoresIds = dt }, commandType: CommandType.StoredProcedure);
+
+                return idsActoresExistentes.ToList();
+            }
+        }
+
         public async Task BorrarActor(int id)
         {
             using (var conexion = new SqlConnection(connectionString))

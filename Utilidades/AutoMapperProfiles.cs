@@ -21,6 +21,8 @@ namespace MinimalAPICurso.Utilidades
 
       CreateMap<CrearComentarioDTO, Comentario>();
       CreateMap<Comentario, ComentarioDTO>();
+
+      CreateMap<AsignarActorPeliculaDTO, ActorPelicula>();
     }
   }
 }

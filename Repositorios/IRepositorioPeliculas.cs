@@ -16,5 +16,6 @@ namespace MinimalAPICurso.Repositorios
         Task<Pelicula?> ObtenerPeliculaPorId(int id);
         Task<List<Pelicula>> ObtenerPeliculas(PaginacionDTO paginacionDTO);
         Task AsignarGeneros(int id, List<int> generosIds);
+        Task AsignarActores(int id, List<ActorPelicula> actores);
     }
 }

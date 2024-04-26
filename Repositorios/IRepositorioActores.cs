@@ -9,6 +9,7 @@ namespace MinimalAPICurso.Repositorios
         Task BorrarActor(int id);
         Task<int> CrearActor(Actor actor);
         Task<bool> ExisteActor(int id);
+        Task<List<int>> ExistenActores(List<int> ids);
         Task<Actor?> ObtenerActorPorId(int id);
         Task<List<Actor>> ObtenerActores(PaginacionDTO paginacionDTO);
         Task<List<Actor>> ObtenerActorPorNombre(string nombre);

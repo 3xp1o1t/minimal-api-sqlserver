@@ -1,0 +1,1 @@
+CREATE TYPE ListadoActores AS TABLE (ActorId int, Personaje nvarchar(150), Orden int);

@@ -105,5 +105,29 @@ namespace MinimalAPICurso.Repositorios
                 await conexion.ExecuteAsync(@"SP_Peliculas_AsignarGeneros", new { peliculaId = id, generosIds = dt }, commandType: CommandType.StoredProcedure);
             }
         }
+
+        public async Task AsignarActores(int id, List<ActorPelicula> actores)
+        {
+            for (int i = 1; i <= actores.Count; i++)
+            {
+                actores[i - 1].Orden = i;
+            }
+
+            var dt = new DataTable();
+            dt.Columns.Add("ActorId", typeof(int));
+            dt.Columns.Add("Persona", typeof(string));
+            dt.Columns.Add("Orden", typeof(int));
+
+            foreach (var actorPelicula in actores)
+            {
+                dt.Rows.Add(actorPelicula.ActorId, actorPelicula.Personaje, actorPelicula.Orden);
+            }
+
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                await conexion.ExecuteAsync(@"SP_Peliculas_AsignarActores",
+                new { peliculaId = id, actores = dt }, commandType: CommandType.StoredProcedure);
+            }
+        }
     }
 }
