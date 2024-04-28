@@ -44,6 +44,27 @@ namespace MinimalAPICurso.Repositorios
                 {
                     var pelicula = await multi.ReadFirstAsync<Pelicula>();
                     var comentarios = await multi.ReadAsync<Comentario>();
+                    var generos = await multi.ReadAsync<Genero>();
+                    var actores = await multi.ReadAsync<ActorPeliculaDTO>();
+
+                    foreach (var genero in generos)
+                    {
+                        pelicula.GenerosPeliculas.Add(new GeneroPelicula
+                        {
+                            GeneroId = genero.Id,
+                            Genero = genero
+                        });
+                    }
+
+                    foreach (var actor in actores)
+                    {
+                        pelicula.ActoresPeliculas.Add(new ActorPelicula
+                        {
+                            ActorId = actor.Id,
+                            Personaje = actor.Personaje,
+                            Actor = new Actor { Nombre = actor.Nombre }
+                        });
+                    }
 
                     pelicula.Comentarios = comentarios.ToList();
                     return pelicula;
