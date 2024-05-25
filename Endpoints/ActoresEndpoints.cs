@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Data.SqlClient;
 using MinimalAPICurso.DTOs;
 using MinimalAPICurso.Entidades;
+using MinimalAPICurso.Filtros;
 using MinimalAPICurso.Repositorios;
 using MinimalAPICurso.Servicios;
 
@@ -25,8 +26,8 @@ namespace MinimalAPICurso.Endpoints
             group.MapGet("/", ObtenerActores).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("actores-get"));
             group.MapGet("/{id:int}", ObtenerActorPorId);
             group.MapGet("obtenerPorNombre/{nombre}", ObtenerActorPorNombre);
-            group.MapPost("/", CrearActor).DisableAntiforgery();
-            group.MapPut("/{id:int}", ActualizarActor).DisableAntiforgery();
+            group.MapPost("/", CrearActor).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>();
+            group.MapPut("/{id:int}", ActualizarActor).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearActorDTO>>();
             group.MapDelete("/{id:int}", BorrarActor);
             return group;
         }
@@ -59,15 +60,8 @@ namespace MinimalAPICurso.Endpoints
             return TypedResults.Ok(actoresDTO);
         }
 
-        static async Task<Results<Created<ActorDTO>, ValidationProblem>> CrearActor([FromForm] CrearActorDTO crearActorDTO, IRepositorioActores repositorioActores, IOutputCacheStore outputCacheStore, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos, IValidator<CrearActorDTO> validador)
+        static async Task<Results<Created<ActorDTO>, ValidationProblem>> CrearActor([FromForm] CrearActorDTO crearActorDTO, IRepositorioActores repositorioActores, IOutputCacheStore outputCacheStore, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos)
         {
-            var resultadoValidacion = await validador.ValidateAsync(crearActorDTO);
-
-            if (!resultadoValidacion.IsValid)
-            {
-                return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
-            }
-
             var actor = mapper.Map<Actor>(crearActorDTO);
 
             if (crearActorDTO.Foto is not null)

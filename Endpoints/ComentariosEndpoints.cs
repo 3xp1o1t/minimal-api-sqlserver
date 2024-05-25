@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 using MinimalAPICurso.DTOs;
 using MinimalAPICurso.Entidades;
+using MinimalAPICurso.Filtros;
 using MinimalAPICurso.Repositorios;
 
 namespace MinimalAPICurso.Endpoints
@@ -17,8 +18,8 @@ namespace MinimalAPICurso.Endpoints
         {
             group.MapGet("/", ObtenerComentarios).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("comentarios-get").SetVaryByRouteValue(new string[] { "peliculaId" }));
             group.MapGet("/{id:int}", ObtenerComentarioPorId);
-            group.MapPost("/", CrearComentario);
-            group.MapPut("/{id:int}", ActualizarComentario);
+            group.MapPost("/", CrearComentario).AddEndpointFilter<FiltroValidaciones<CrearComentarioDTO>>();
+            group.MapPut("/{id:int}", ActualizarComentario).AddEndpointFilter<FiltroValidaciones<CrearComentarioDTO>>();
             group.MapDelete("/{id:int}", BorrarComentario);
             return group;
         }

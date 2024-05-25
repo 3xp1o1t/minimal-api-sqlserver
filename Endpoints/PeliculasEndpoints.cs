@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using MinimalAPICurso.DTOs;
 using MinimalAPICurso.Entidades;
+using MinimalAPICurso.Filtros;
 using MinimalAPICurso.Repositorios;
 using MinimalAPICurso.Servicios;
 
@@ -20,8 +21,8 @@ namespace MinimalAPICurso.Endpoints
         {
             group.MapGet("/", ObtenerPeliculas).CacheOutput(c => c.Expire(TimeSpan.FromSeconds(60)).Tag("peliculas-get"));
             group.MapGet("/{id:int}", ObtenerPeliculaPorId);
-            group.MapPost("/", CrearPelicula).DisableAntiforgery();
-            group.MapPut("/{id:int}", ActualizarPelicula).DisableAntiforgery();
+            group.MapPost("/", CrearPelicula).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>();
+            group.MapPut("/{id:int}", ActualizarPelicula).DisableAntiforgery().AddEndpointFilter<FiltroValidaciones<CrearPeliculaDTO>>();
             group.MapDelete("/{id:int}", BorrarPelicula);
             group.MapPost("/{id:int}/asignargeneros", AsignarGeneros);
             group.MapPost("/{id:int}/asignaractores", AsignarActores);
