@@ -61,6 +61,18 @@ namespace MinimalAPICurso.Repositorios
             }
         }
 
+        public async Task<bool> ExisteGenero(int id, string nombre)
+        {
+            using (var conexion = new SqlConnection(connectionString))
+            {
+                var existe = await conexion.QuerySingleAsync<bool>(@"SP_ExisteGeneroPorIdYNombre",
+                new { id, nombre },
+                commandType: CommandType.StoredProcedure);
+
+                return existe;
+            }
+        }
+
         public async Task ActualizarGenero(Genero genero)
         {
             using (var conexion = new SqlConnection(connectionString))

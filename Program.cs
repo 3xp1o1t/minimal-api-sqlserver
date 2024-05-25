@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
@@ -50,10 +51,11 @@ builder.Services.AddScoped<IRepositorioComentarios, RepositorioComentarios>();
 builder.Services.AddScoped<IAlmacenadorArchivos, AlmacenadorArchivosLocal>();
 builder.Services.AddHttpContextAccessor();
 
-
-
 // AutoMapper - typeof permite buscar recursos desde la raiz.
 builder.Services.AddAutoMapper(typeof(Program));
+
+// Fluent validation
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // Termina area de Servicios
 
