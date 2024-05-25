@@ -1,5 +1,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OutputCaching;
 using MinimalAPICurso.Endpoints;
@@ -42,6 +43,7 @@ builder.Services.AddScoped<IRepositorioGeneros, RepositorioGeneros>();
 builder.Services.AddScoped<IRepositorioActores, RepositorioActores>();
 builder.Services.AddScoped<IRepositorioPeliculas, RepositorioPeliculas>();
 builder.Services.AddScoped<IRepositorioComentarios, RepositorioComentarios>();
+builder.Services.AddScoped<IRepositorioErrores, RepositorioErrores>();
 
 
 // Servicio de subida de archivos Azure
@@ -77,8 +79,21 @@ if (builder.Environment.IsDevelopment())
 
 app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.Run(async context =>
 {
-  await TypedResults.BadRequest(
-    new { tipo = "error", mensaje = "ha ocurrido un mensaje de rror inesperado", estatus = 500 }
+  var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+
+  var excepcion = exceptionHandlerFeature?.Error!;
+
+  var error = new Error();
+  error.Fecha = DateTime.UtcNow;
+  error.MensajeDeError = excepcion.Message;
+  error.StackTrace = excepcion.StackTrace;
+
+  var repositorio = context.RequestServices.GetRequiredService<IRepositorioErrores>();
+
+  await repositorio.CrearMensajeError(error);
+
+  await Results.BadRequest(
+    new { tipo = "error", mensaje = "ha ocurrido un mensaje de error inesperado", estatus = 500 }
   ).ExecuteAsync(context);
 }));
 app.UseStatusCodePages();
