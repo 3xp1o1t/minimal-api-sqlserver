@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
@@ -58,8 +59,15 @@ namespace MinimalAPICurso.Endpoints
             return TypedResults.Ok(actoresDTO);
         }
 
-        static async Task<Created<ActorDTO>> CrearActor([FromForm] CrearActorDTO crearActorDTO, IRepositorioActores repositorioActores, IOutputCacheStore outputCacheStore, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos)
+        static async Task<Results<Created<ActorDTO>, ValidationProblem>> CrearActor([FromForm] CrearActorDTO crearActorDTO, IRepositorioActores repositorioActores, IOutputCacheStore outputCacheStore, IMapper mapper, IAlmacenadorArchivos almacenadorArchivos, IValidator<CrearActorDTO> validador)
         {
+            var resultadoValidacion = await validador.ValidateAsync(crearActorDTO);
+
+            if (!resultadoValidacion.IsValid)
+            {
+                return TypedResults.ValidationProblem(resultadoValidacion.ToDictionary());
+            }
+
             var actor = mapper.Map<Actor>(crearActorDTO);
 
             if (crearActorDTO.Foto is not null)
