@@ -57,6 +57,10 @@ builder.Services.AddAutoMapper(typeof(Program));
 // Fluent validation
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
+// Agregar errores personalizados cuando hay excepciones no controladas
+// Va de la mano con los middleware UseExceptionHandler y UseStatusCodePages
+builder.Services.AddProblemDetails();
+
 // Termina area de Servicios
 
 var app = builder.Build();
@@ -70,6 +74,14 @@ if (builder.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.Run(async context =>
+{
+  await TypedResults.BadRequest(
+    new { tipo = "error", mensaje = "ha ocurrido un mensaje de rror inesperado", estatus = 500 }
+  ).ExecuteAsync(context);
+}));
+app.UseStatusCodePages();
 
 // Requerio para la carga de archivos estaticos
 app.UseStaticFiles();
